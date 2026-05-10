@@ -237,6 +237,10 @@ If you use DICE in your research, please cite:
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+## ⚠️ Note
+
+This code has not been fully verified. If you encounter any issues or bugs, please feel free to [open an issue](https://github.com/hexiaoxiao-cs/DICE/issues) on GitHub.
+
 ## 🤝 Contributing
 
 We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
@@ -249,4 +253,4 @@ For questions and issues:
 
 ---
 
-**[Project Website](https://hexiaoxiao-cs.github.io/DICE/)** | **[Paper](https://arxiv.org)** | **[Demo](https://huggingface.co/spaces/yourusername/DICE)**
+**[Project Website](https://hexiaoxiao-cs.github.io/DICE/)** | **[Paper](https://openaccess.thecvf.com/content/WACV2026/html/He_DICE_Discrete_Inversion_Enabling_Controllable_Editing_for_Masked_Generative_Models_WACV_2026_paper.html)**
