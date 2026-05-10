@@ -1,0 +1,55 @@
+# Image Editing Configuration (Paella)
+# Best hyperparameters from paper (Table 2)
+
+model: paella
+task: image_editing
+
+# Hyperparameters (paper best: CFG=10.0, λ₁=0.7, λ₂=0.3, τ=0.9)
+hyperparameters:
+  cfg: 10.0                    # Classifier-free guidance scale
+  lambda_1: 0.7                 # Noise injection weight for recorded noise
+  lambda_2: 0.3                 # Noise injection weight for random Gumbel noise
+  tau: 0.9                      # Maximum masking ratio (max_t)
+  steps: 32                     # Total sampling steps
+  renoise_steps: 26             # Number of renoising steps
+
+# Model settings
+model_settings:
+  latent_shape: [1, 64, 64]     # [Batch, Height, Width]
+  num_labels: 8192               # Vocabulary size for tokens
+  temperature:
+    inversion: [0.2, 1.2]        # Temperature schedule for inversion
+    sampling: [1.2, 0.2]         # Temperature schedule for sampling
+
+# Inversion settings
+inversion:
+  t_start: 0.0                  # Start time (always 0.0 for inversion)
+  t_end: 0.9                    # End time (equals tau)
+  fixed_noise: true             # Use fixed noise tokens
+
+# Sampling settings
+sampling:
+  t_start: 0.9                  # Start time (equals tau)
+  t_end: 0.0                    # End time (always 0.0 for sampling)
+  noise_injection: addition     # Options: addition, variance_preserving, max
+
+# Evaluation metrics
+metrics:
+  - structure_distance
+  - clip_similarity_whole
+  - clip_similarity_edited
+  - psnr_background
+  - lpips_background
+  - ssim_background
+  - mse_background
+
+# Dataset
+dataset:
+  name: PIE-Bench
+  num_images: 700
+  categories: 9
+
+# Paths
+paths:
+  model_weights: models/paella/
+  output_dir: outputs/editing/

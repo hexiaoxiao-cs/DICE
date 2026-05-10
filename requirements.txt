@@ -1,0 +1,36 @@
+# Core Dependencies
+torch>=2.0.0
+torchvision>=0.15.0
+numpy>=1.24.0
+Pillow>=9.5.0
+tqdm>=4.65.0
+
+# Transformers and Language Models
+transformers>=4.30.0
+open_clip_torch>=2.20.0
+
+# Image Processing and Metrics
+matplotlib>=3.7.0
+requests>=2.31.0
+
+# Evaluation Metrics
+lpips>=0.1.4
+
+# Optional: Visualization and Logging
+wandb>=0.15.0
+
+# Optional: Warmup Scheduler for Training
+warmup_scheduler>=0.3.0
+
+# External Dependencies
+# arroz package (for Paella prior model)
+# Install with: pip install git+https://github.com/pabloppp/Arroz-Con-Cosas
+# Or use the bundled version in this package
+
+# PyTorch Tools (optional, for some utilities)
+# git+https://github.com/pabloppp/pytorch-tools
+
+# Development Dependencies
+# pytest>=7.0.0
+# black>=23.0.0
+# flake8>=6.0.0

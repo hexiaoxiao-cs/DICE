@@ -1,0 +1,48 @@
+# Image Editing Configuration (VQ-Diffusion)
+# Hyperparameters from paper (Table 2)
+
+model: vq_diffusion
+task: image_editing
+
+# Hyperparameters (paper: CFG=5.0, λ₁=0.2, λ₂=0.8)
+hyperparameters:
+  cfg: 5.0                      # Classifier-free guidance scale
+  lambda_1: 0.2                  # Noise injection weight for recorded noise
+  lambda_2: 0.8                  # Noise injection weight for random Gumbel noise
+  tau: 0.9                       # Maximum masking ratio
+  steps: 32                      # Total sampling steps
+  renoise_steps: 26              # Number of renoising steps
+
+# Model settings
+model_settings:
+  latent_shape: [1, 32, 32]      # Smaller for VQ-Diffusion
+  num_labels: 8192
+  temperature:
+    inversion: [0.2, 1.2]
+    sampling: [1.2, 0.2]
+
+# Note: VQ-Diffusion uses 256x256 images
+image_size: 256
+
+# Inversion settings
+inversion:
+  t_start: 0.0
+  t_end: 0.9
+  fixed_noise: true
+
+# Sampling settings
+sampling:
+  t_start: 0.9
+  t_end: 0.0
+  noise_injection: addition
+
+# Evaluation metrics
+metrics:
+  - structure_distance
+  - clip_similarity_whole
+  - clip_similarity_edited
+
+# Paths
+paths:
+  model_weights: models/vq_diffusion/
+  output_dir: outputs/vq_diffusion_editing/

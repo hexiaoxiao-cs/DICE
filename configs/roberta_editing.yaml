@@ -1,0 +1,49 @@
+# Text Editing Configuration (RoBERTa)
+# Hyperparameters for sentiment editing (Tables 4-5)
+
+model: roberta
+task: text_editing
+
+# Hyperparameters (paper: τ=0.7, λ₁=0.2, λ₂=0.8 or λ₁=0.25, λ₂=0.75)
+hyperparameters:
+  - cfg: null                   # No CFG for text
+    lambda_1: 0.2
+    lambda_2: 0.8
+    tau: 0.7
+    steps: 10
+    
+  - cfg: null
+    lambda_1: 0.25
+    lambda_2: 0.75
+    tau: 0.7
+    steps: 10
+
+# Model settings
+model_settings:
+  model_name: roberta-base
+  max_length: 512
+  mask_token_id: 50264           # RoBERTa mask token
+
+# Task settings
+task_settings:
+  task_type: sentiment_editing   # Edit sentiment while preserving structure
+  dataset: sentiment_pairs       # 200 sentence pairs
+  prompt_format: "sentiment_type. sentence_content."
+
+# Evaluation
+evaluation:
+  use_chatgpt: true              # Use ChatGPT for evaluation
+  metrics:
+    - structure_preservation
+    - sentiment_correctness
+
+# Example prompts
+examples:
+  negative: "Negative Sentiment: Despite her efforts. The event was a complete disaster."
+  positive: "Positive Sentiment: Thanks to her efforts. The event was a huge success."
+
+# Paths
+paths:
+  model_weights: roberta-base    # From HuggingFace
+  dataset: data/sentiment_pairs.json
+  output_dir: outputs/roberta_editing/

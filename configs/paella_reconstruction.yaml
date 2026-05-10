@@ -1,0 +1,46 @@
+# Image Reconstruction Configuration (Paella)
+# Hyperparameters for inversion reconstruction (Table 1)
+
+model: paella
+task: image_reconstruction
+
+# Hyperparameters (paper: τ=1.0, λ₁=1.0, λ₂=0.0)
+hyperparameters:
+  cfg: 8.0                      # Classifier-free guidance scale
+  lambda_1: 1.0                  # Use only recorded noise (perfect reconstruction)
+  lambda_2: 0.0                  # No random noise
+  tau: 1.0                       # Maximum masking ratio
+  steps: 32                      # Total sampling steps
+  renoise_steps: 26              # Number of renoising steps
+
+# Model settings
+model_settings:
+  latent_shape: [1, 64, 64]
+  num_labels: 8192
+  temperature:
+    inversion: [0.2, 1.2]
+    sampling: [1.2, 0.2]
+
+# Inversion settings
+inversion:
+  t_start: 0.0
+  t_end: 1.0                     # Full inversion
+  fixed_noise: true
+
+# Sampling settings
+sampling:
+  t_start: 1.0                   # Full reconstruction
+  t_end: 0.0
+  noise_injection: addition
+
+# Evaluation metrics
+metrics:
+  - psnr
+  - lpips
+  - ssim
+  - mse
+
+# Paths
+paths:
+  model_weights: models/paella/
+  output_dir: outputs/reconstruction/

@@ -1,0 +1,44 @@
+# Default hyperparameters for DICE with Paella
+# These match the best configuration reported in the paper
+
+# Model
+model_path: "checkpoints/paella"
+model_name: "paella_v3.pt"
+vqgan_name: "vqgan_f4.pt"
+prior_name: "prior_v1.pt"
+
+# Diffusion parameters
+steps: 32
+renoise_steps: 26
+cfg: 8.0          # Classifier-free guidance scale
+lamb: 0.9         # Noise interpolation weight (lambda)
+max_t: 0.75       # Maximum noise level during inversion
+
+# Temperature schedule
+# Inversion: low -> high (0.2 -> 1.2)
+# Reconstruction/Editing: high -> low (1.2 -> 0.2)
+temperature_start_inv: 0.2
+temperature_end_inv: 1.2
+temperature_start_rec: 1.2
+temperature_end_rec: 0.2
+
+# Latent shape
+# 256x256 images: latent_shape = (1, 64, 64)
+# 512x512 images: latent_shape = (1, 128, 128)
+resolution: 512  # Output image resolution
+
+# Attention weights
+attn_weight_text: 1.2     # Attention weight for text tokens
+attn_weight_image: 0.4    # Attention weight for image embeddings
+
+# Conditioning
+use_t5: true
+use_clip_text: true
+use_clip_image: false
+negative_caption: "low quality, low resolution, bad image, blurry, blur"
+
+# Lambda schedule type: "None", "linear", "exp"
+lamb_schedule: "None"
+
+# Seed
+seed: 42
