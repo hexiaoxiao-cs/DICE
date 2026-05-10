@@ -1,6 +1,6 @@
 # 🎲 DICE: Discrete Inversion for Controllable Editing
 
-[![Paper](https://img.shields.io/badge/Paper-WACV%202026-blue)](https://arxiv.org)
+[![Paper](https://img.shields.io/badge/Paper-WACV%202026-blue)](https://openaccess.thecvf.com/content/WACV2026/html/He_DICE_Discrete_Inversion_Enabling_Controllable_Editing_for_Masked_Generative_Models_WACV_2026_paper.html)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Python 3.8+](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org)
 
@@ -51,64 +51,36 @@ mkdir -p models/paella
 
 ### Image Editing with Paella
 
-```python
-from dice import invert_new, sample_ddpm_inverse_new
-from models.paella import Paella
-from models.vqgan import VQModel
-from PIL import Image
+```bash
+# Best configuration from paper (Table 2)
+python scripts/image_editing.py \
+    --config configs/paella_editing.yaml \
+    --cfg 10.0 \
+    --lambda_1 0.7 \
+    --lambda_2 0.3 \
+    --tau 0.9
+```
 
-# Load models
-model = Paella().cuda()
-vqmodel = VQModel().cuda()
+### Image Reconstruction
 
-# Load image and encode to tokens
-image = Image.open("your_image.jpg").resize((256, 256))
-tokens = vqmodel.encode(image)
-
-# Step 1: Invert (record noise sequence)
-noisy_tokens, _, zs, mask_schedule, _ = invert_new(
-    model=model,
-    x0=tokens,
-    model_inputs={"byt5": text_embedding, "clip": clip_embedding},
-    latent_shape=(1, 64, 64),
-    cfg=(10.0, 10.0),
-    t_end=0.9,  # tau
-    steps=32
-)
-
-# Step 2: Edit with new prompt
-edited_tokens, _ = sample_ddpm_inverse_new(
-    model=model,
-    model_inputs=new_prompt_inputs,
-    latent_shape=(1, 64, 64),
-    zs=zs,
-    mask_schedule=mask_schedule,
-    init_noise=noisy_tokens,
-    lamb=0.7,  # lambda_1: controls editing strength
-    cfg=(10.0, 10.0),
-    steps=32
-)
-
-# Decode to image
-edited_image = vqmodel.decode(edited_tokens)
-edited_image.save("edited_image.jpg")
+```bash
+# Perfect reconstruction (Table 1)
+python scripts/image_editing.py \
+    --config configs/paella_reconstruction.yaml \
+    --lambda_1 1.0 \
+    --lambda_2 0.0 \
+    --tau 1.0
 ```
 
 ### Text Editing with RoBERTa
 
-```python
-from transformers import RobertaForMaskedLM, RobertaTokenizer
-
-# Load RoBERTa
-model = RobertaForMaskedLM.from_pretrained("roberta-base")
-tokenizer = RobertaTokenizer.from_pretrained("roberta-base")
-
-# Example: Sentiment editing
-original_text = "Negative Sentiment: Despite her efforts. The event was a complete disaster."
-target_sentiment = "Positive Sentiment: Thanks to her efforts."
-
-# Apply DICE inversion and editing
-# (See notebooks/text_editing_demo.ipynb for full example)
+```bash
+# Sentiment editing (Tables 4-5)
+python scripts/text_editing_roberta.py \
+    --config configs/roberta_editing.yaml \
+    --lambda_1 0.2 \
+    --lambda_2 0.8 \
+    --tau 0.7
 ```
 
 ## 📊 Reproducing Paper Results
@@ -201,10 +173,7 @@ DICE/
 
 ## 📚 Documentation
 
-- **Quick Start Tutorial**: [notebooks/quickstart.ipynb](notebooks/quickstart.ipynb)
-- **Image Editing Demo**: [notebooks/image_editing_demo.ipynb](notebooks/image_editing_demo.ipynb)
-- **Text Editing Demo**: [notebooks/text_editing_demo.ipynb](notebooks/text_editing_demo.ipynb)
-- **Ablation Studies**: [notebooks/ablation_studies.ipynb](notebooks/ablation_studies.ipynb)
+For detailed usage examples and tutorials, see the `notebooks/` directory.
 
 ## 🎨 Results
 
